@@ -310,6 +310,17 @@ static PSDP_OPTION getAttributesList(char*urlSafeAddr) {
         else {
             err |= addAttributeString(&optionHead, "x-ss-video[0].chromaSamplingType", "0");
         }
+
+        // Ask for TCP video if the host offers it and the client wants it
+        if (VideoTcpPortNumber != 0 && StreamConfig.videoTcpConnections > 0) {
+            VideoTcpConnections = StreamConfig.videoTcpConnections > 16 ? 16 : StreamConfig.videoTcpConnections;
+            snprintf(payloadStr, sizeof(payloadStr), "%d", VideoTcpConnections);
+            err |= addAttributeString(&optionHead, "x-ss-video.tcpConnections", payloadStr);
+            Limelog("Requesting video over %d TCP connections\n", VideoTcpConnections);
+        }
+        else {
+            VideoTcpConnections = 0;
+        }
     }
 
     snprintf(payloadStr, sizeof(payloadStr), "%d", StreamConfig.width);

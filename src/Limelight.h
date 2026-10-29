@@ -100,6 +100,10 @@ typedef struct _STREAM_CONFIGURATION {
     // in /launch and /resume requests.
     char remoteInputAesKey[16];
     char remoteInputAesIv[16];
+
+    // Carry video over this many TCP connections when the host offers TCP video
+    // (x-ss-video.tcpPort in RTSP DESCRIBE). 0 keeps video on UDP.
+    int videoTcpConnections;
 } STREAM_CONFIGURATION, *PSTREAM_CONFIGURATION;
 
 // Use this function to zero the stream configuration when allocated on the stack or heap

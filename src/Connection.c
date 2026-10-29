@@ -29,6 +29,8 @@ uint16_t RtspPortNumber;
 uint16_t ControlPortNumber;
 uint16_t AudioPortNumber;
 uint16_t VideoPortNumber;
+uint16_t VideoTcpPortNumber;
+int VideoTcpConnections;
 SS_PING AudioPingPayload;
 SS_PING VideoPingPayload;
 uint32_t ControlConnectData;
@@ -267,6 +269,8 @@ int LiStartConnection(PSERVER_INFORMATION serverInfo, PSTREAM_CONFIGURATION stre
     VideoPortNumber = 0;
     ControlPortNumber = 0;
     AudioPortNumber = 0;
+    VideoTcpPortNumber = 0;
+    VideoTcpConnections = 0;
 
     // Parse RTSP port number from RTSP session URL
     if (!parseRtspPortNumberFromUrl(serverInfo->rtspSessionUrl, &RtspPortNumber)) {

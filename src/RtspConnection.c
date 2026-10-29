@@ -1153,6 +1153,18 @@ int performRtspHandshake(PSERVER_INFORMATION serverInfo) {
         if (!parseSdpAttributeToUInt(response.payload, "x-ss-general.encryptionRequested", &EncryptionFeaturesRequested)) {
             EncryptionFeaturesRequested = 0;
         }
+
+        // Look for a host that can carry video over TCP
+        {
+            uint32_t tcpPort;
+            if (parseSdpAttributeToUInt(response.payload, "x-ss-video.tcpPort", &tcpPort) && tcpPort > 0 && tcpPort < 65536) {
+                VideoTcpPortNumber = (uint16_t)tcpPort;
+                Limelog("Host offers TCP video on port %u\n", VideoTcpPortNumber);
+            }
+            else {
+                VideoTcpPortNumber = 0;
+            }
+        }
         EncryptionFeaturesEnabled = 0;
 
         // Parse the Opus surround parameters out of the RTSP DESCRIBE response.
