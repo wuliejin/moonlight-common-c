@@ -501,6 +501,8 @@ typedef struct _CONNECTION_LISTENER_CALLBACKS {
     ConnListenerSetMotionEventState setMotionEventState;
     ConnListenerSetControllerLED setControllerLED;
     ConnListenerSetAdaptiveTriggers setAdaptiveTriggers;
+    // 48 kHz S16LE stereo actuator PCM. The callback must copy before returning.
+    void (*controllerHaptics)(uint16_t controllerNumber, uint32_t sequence, const uint8_t* pcm, uint16_t frames);
 } CONNECTION_LISTENER_CALLBACKS, *PCONNECTION_LISTENER_CALLBACKS;
 
 // Use this function to zero the connection callbacks when allocated on the stack or heap
@@ -783,6 +785,11 @@ int LiSendMultiControllerEvent(short controllerNumber, short activeGamepadMask,
 #define LI_CTYPE_PS       0x02
 #define LI_CTYPE_NINTENDO 0x03
 #define LI_CTYPE_STEAM    0x04 // Valve Steam Controller (Xbox-style layout plus dual touchpads, gyro/accel and grip buttons)
+// Apollo/Moonlight controller-generation extension; never flatten these to Xbox 360.
+#define LI_CTYPE_XBOX_ONE    0x05
+#define LI_CTYPE_XBOX_SERIES 0x06
+#define LI_CTYPE_DUALSENSE   0x07
+#define LI_CTYPE_XBOX_360    0x08
 #define LI_CCAP_ANALOG_TRIGGERS 0x01 // Reports values between 0x00 and 0xFF for trigger axes
 #define LI_CCAP_RUMBLE          0x02 // Can rumble in response to ConnListenerRumble() callback
 #define LI_CCAP_TRIGGER_RUMBLE  0x04 // Can rumble triggers in response to ConnListenerRumbleTriggers() callback
